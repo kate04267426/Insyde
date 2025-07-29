@@ -12,6 +12,7 @@ int main()
 {
 	const char *chipname = "gpiochip0";
 	unsigned int input_gpio = 192;   // GPIOY0
+	unsigned int output_gpio = 194;   // GPIOY0
 	struct gpiod_chip *chip;
 	struct gpiod_line *input_line;
 	struct gpiod_line_event event;
