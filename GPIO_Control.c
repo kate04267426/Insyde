@@ -12,10 +12,8 @@ int main()
 {
 	const char *chipname = "gpiochip0";
 	unsigned int input_gpio = 192;   // GPIOY0
-	unsigned int output_gpio = 194;  // GPIOY2
 	struct gpiod_chip *chip;
 	struct gpiod_line *input_line;
-	struct gpiod_line *output_line;
 	struct gpiod_line_event event;
 	int ret;
 
@@ -26,22 +24,7 @@ int main()
 		exit(1);
 	}
 
-	// 設定 GPIOY2 (#194) 為輸出（但不操作值）
-	output_line = gpiod_chip_get_line(chip, output_gpio);
-	if (!output_line) {
-		perror("Get output line failed");
-		gpiod_chip_close(chip);
-		exit(1);
-	}
-
-	ret = gpiod_line_request_output(output_line, CONSUMER, 0); // 初始輸出為 0
-	if (ret < 0) {
-		perror("Request output line failed");
-		gpiod_chip_close(chip);
-		exit(1);
-	}
-
-	// 設定 GPIOY0 (#192) 為 rising-edge 偵測
+	// 只處理 GPIO192（input），不綁定 GPIO194
 	input_line = gpiod_chip_get_line(chip, input_gpio);
 	if (!input_line) {
 		perror("Get input line failed");
@@ -80,7 +63,6 @@ int main()
 	}
 
 	gpiod_line_release(input_line);
-	gpiod_line_release(output_line);
 	gpiod_chip_close(chip);
 	return 0;
 }
