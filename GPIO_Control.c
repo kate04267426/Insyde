@@ -26,7 +26,6 @@ int main()
 		exit(1);
 	}
 
-	// 只處理 GPIO192（input），不綁定 GPIO194
 	input_line = gpiod_chip_get_line(chip, input_gpio);
 	if (!input_line) {
 		perror("Get input line failed");
@@ -40,7 +39,14 @@ int main()
 		exit(1);
 	}
 	
-
+	ret = gpiod_line_request_output(output_line, CONSUMER, 0);
+	if (ret < 0) {
+		perror("Request output_line as output failed\n");
+		gpiod_line_release(output_line);
+		return -1;
+	}
+	
+	
 	ret = gpiod_line_request_rising_edge_events(input_line, CONSUMER);
 	if (ret < 0) {
 		perror("Request rising edge events failed");
@@ -65,7 +71,10 @@ int main()
 			perror("Event read error");
 			break;
 		}
-
+		else 
+		{
+			rintf("Rising edge detected on GPIO %d\n");
+		}
 		if (event.event_type == GPIOD_LINE_EVENT_RISING_EDGE) {
 			printf("Rising edge detected on GPIO %d\n", input_gpio);
 		}
