@@ -38,15 +38,7 @@ int main()
 		gpiod_chip_close(chip);
 		exit(1);
 	}
-	
-	ret = gpiod_line_request_output(output_line, CONSUMER, 0);
-	if (ret < 0) {
-		perror("Request output_line as output failed\n");
-		gpiod_line_release(output_line);
-		return -1;
-	}
-	
-	
+		
 	ret = gpiod_line_request_rising_edge_events(input_line, CONSUMER);
 	if (ret < 0) {
 		perror("Request rising edge events failed");
