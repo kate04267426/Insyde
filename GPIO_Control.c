@@ -45,7 +45,7 @@ int main()
 		gpiod_line_release(output_gpio);
 		return -1;
 	}
-	gpiod_line_release(control_line);
+	gpiod_line_release(output_gpio);
 		
 	ret = gpiod_line_request_rising_edge_events(input_line, CONSUMER);
 	if (ret < 0) {
