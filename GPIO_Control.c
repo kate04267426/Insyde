@@ -15,6 +15,7 @@ int main()
 	unsigned int output_gpio = 194;   // GPIOY0
 	struct gpiod_chip *chip;
 	struct gpiod_line *input_line;
+	struct gpiod_line *output_line;
 	struct gpiod_line_event event;
 	int ret;
 
@@ -32,11 +33,18 @@ int main()
 		gpiod_chip_close(chip);
 		exit(1);
 	}
+	output_line = gpiod_chip_get_line(chip, output_gpio);
+	if (!output_line) {
+		perror("Get output line failed");
+		gpiod_chip_close(chip);
+		exit(1);
+	}
+	
 
 	ret = gpiod_line_request_rising_edge_events(input_line, CONSUMER);
 	if (ret < 0) {
 		perror("Request rising edge events failed");
-		gpiod_chip_close(chip);
+		gpiod_line_release(input_line);
 		exit(1);
 	}
 
