@@ -65,7 +65,7 @@ int main()
 		}
 		else 
 		{
-			rintf("Rising edge detected on GPIO %d\n");
+			printf("Rising edge detected on GPIO ");
 		}
 		if (event.event_type == GPIOD_LINE_EVENT_RISING_EDGE) {
 			printf("Rising edge detected on GPIO %d\n", input_gpio);
