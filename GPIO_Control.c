@@ -17,7 +17,7 @@ int main()
 	struct gpiod_line *input_line;
 	struct gpiod_line *output_line;
 	struct gpiod_line_event event;
-	int ret;
+	int ret=0;
 
 	// 開啟 chip
 	chip = gpiod_chip_open_by_name(chipname);
@@ -38,6 +38,14 @@ int main()
 		gpiod_chip_close(chip);
 		exit(1);
 	}
+	
+	ret = gpiod_line_request_output(output_gpio, CONSUMER, 0);
+	if (ret < 0) {
+		perror("Request output_gpio as output failed\n");
+		gpiod_line_release(output_gpio);
+		return -1;
+	}
+	gpiod_line_release(control_line);
 		
 	ret = gpiod_line_request_rising_edge_events(input_line, CONSUMER);
 	if (ret < 0) {
